@@ -1,25 +1,57 @@
 {
   "name": "mock-vercel-sandbox",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Docker-based mock implementation of the Vercel Sandbox for local development",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./mock": {
+      "types": "./dist/mock.d.ts",
+      "import": "./dist/mock.js"
+    }
+  },
+  "files": [
+    "dist",
+    "Dockerfile",
+    "README.md"
+  ],
   "scripts": {
-    "sandbox": "tsx src/sandbox.ts",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run clean && pnpm run build",
     "docker:build": "docker build -t mock-vercel-sandbox .",
     "docker:run": "docker run -d --rm --name mock-vercel-sandbox mock-vercel-sandbox",
     "docker:stop": "docker stop mock-vercel-sandbox",
     "docker:exec": "docker exec -it mock-vercel-sandbox"
   },
-  "keywords": [],
+  "keywords": [
+    "vercel",
+    "sandbox",
+    "docker",
+    "mock",
+    "testing",
+    "local-development"
+  ],
   "author": "Charles Francoise",
   "license": "Apache-2.0",
   "packageManager": "pnpm@10.18.0",
   "devDependencies": {
     "@types/node": "^24.9.2",
+    "@types/tar-stream": "^3.1.4",
     "@vercel/sandbox": "^1.0.2",
     "dotenv": "^17.2.3",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vercel": "^48.7.1"
+  },
+  "dependencies": {
+    "@types/dockerode": "^3.3.45",
+    "dockerode": "^4.0.9",
+    "tar-stream": "^3.1.7"
   }
 }

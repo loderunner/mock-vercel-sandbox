@@ -6,7 +6,9 @@
     "strict": true,
     "skipLibCheck": true,
     "types": ["node"],
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]
