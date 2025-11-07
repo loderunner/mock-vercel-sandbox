@@ -1,25 +1,74 @@
 {
   "name": "mock-vercel-sandbox",
   "version": "1.0.0",
-  "description": "",
+  "description": "A Docker-based mock implementation of the Vercel Sandbox for local development",
   "type": "module",
-  "scripts": {
-    "sandbox": "tsx src/sandbox.ts",
-    "docker:build": "docker build -t mock-vercel-sandbox .",
-    "docker:run": "docker run -d --rm --name mock-vercel-sandbox mock-vercel-sandbox",
-    "docker:stop": "docker stop mock-vercel-sandbox",
-    "docker:exec": "docker exec -it mock-vercel-sandbox"
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./mock": {
+      "types": "./dist/mock.d.ts",
+      "import": "./dist/mock.js"
+    }
   },
-  "keywords": [],
+  "files": [
+    "dist",
+    "Dockerfile",
+    "README.md",
+    "timeout-manager.sh"
+  ],
+  "scripts": {
+    "lint": "prettier --check . && eslint .",
+    "lint:fix": "prettier --write . && eslint . --fix",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:unit": "vitest run src/__tests__/unit",
+    "test:integration": "vitest run src/__tests__/integration",
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm run clean && pnpm run build"
+  },
+  "keywords": [
+    "vercel",
+    "sandbox",
+    "docker",
+    "mock",
+    "testing",
+    "local-development"
+  ],
   "author": "Charles Francoise",
   "license": "Apache-2.0",
   "packageManager": "pnpm@10.18.0",
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "@types/dockerode": "^3.3.45",
     "@types/node": "^24.9.2",
-    "@vercel/sandbox": "^1.0.2",
+    "@types/tar-stream": "^3.1.4",
+    "@vercel/sandbox": "latest",
+    "@vitest/eslint-plugin": "^1.4.0",
     "dotenv": "^17.2.3",
+    "eslint": "^9.38.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsdoc": "^61.1.11",
+    "globals": "^16.4.0",
+    "jest-extended": "^6.0.0",
+    "prettier": "^3.6.2",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
-    "vercel": "^48.7.1"
+    "typescript-eslint": "^8.46.2",
+    "vercel": "^48.7.1",
+    "vitest": "^4.0.6",
+    "vitest-mock-extended": "^3.1.0"
+  },
+  "dependencies": {
+    "dockerode": "^4.0.9",
+    "nanoid": "^5.1.6",
+    "tar-stream": "^3.1.7"
   }
 }

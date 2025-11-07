@@ -89,7 +89,8 @@ RUN curl -fsSL https://astral.sh/uv/install.sh | sh && \
 
 # Create Vercel directory structure
 RUN mkdir -p /vercel/bin /vercel/sandbox && \
-    chown -R vercel-sandbox:vercel-sandbox /vercel/sandbox
+    chown -R vercel-sandbox:vercel-sandbox /vercel && \
+    chmod 755 /vercel
 
 # Create home directory structure for vercel-sandbox user
 RUN mkdir -p /home/vercel-sandbox/.global/npm /home/vercel-sandbox/.global/pnpm /home/vercel-sandbox/.local/bin && \
@@ -98,6 +99,10 @@ RUN mkdir -p /home/vercel-sandbox/.global/npm /home/vercel-sandbox/.global/pnpm 
 # Set up Git in /opt/git to match Vercel's structure
 RUN mkdir -p /opt/git/bin && \
     ln -s /usr/bin/git /opt/git/bin/git
+
+# Copy sandbox management script
+COPY sandbox.sh /vercel/bin/sandbox.sh
+RUN chmod +x /vercel/bin/sandbox.sh
 
 # Set environment variables to include both Node.js and Python runtimes in PATH
 # This allows the container to support multiple runtimes simultaneously
@@ -108,4 +113,5 @@ ENV HOME=/home/vercel-sandbox
 USER vercel-sandbox
 WORKDIR /home/vercel-sandbox
 
-ENTRYPOINT ["sleep", "infinity"]
+# Run the sandbox manager as the entrypoint
+ENTRYPOINT ["/vercel/bin/sandbox.sh", "start"]
